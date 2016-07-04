@@ -1,2 +1,2 @@
-bundle.js:  carousel.js
-	browserify -t [ babelify ] carousel.js -o bundle.js
+bundle.js:  main.js
+	browserify -t [ babelify ] main.js -o bundle.js
