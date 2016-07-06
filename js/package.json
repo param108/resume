@@ -12,7 +12,8 @@
     "object-assign": "^4.0.1",
     "jquery-ui": "^1.10.5",
     "react": "^0.14.3",
-    "react-dom": "^0.14.3"
+    "react-dom": "^0.14.3",
+    "bootstrap": "^3.3.6"
   },
   "devDependencies": {},
   "scripts": {

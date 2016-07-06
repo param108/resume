@@ -1,11 +1,13 @@
 var React=require('react');
 var ReactDOM=require('react-dom');
-var $=require('jquery');
-
+window.jQuery = require('jquery');
+window.$=window.jQuery;
+var Bootstrap = require('bootstrap');
+var Loader=require('./loading.js');
 $( document ).ready(function(){
 console.log("Running");
 ReactDOM.render(
-  <h1>Hello, world!</h1>,
+  <Loader max="100" val="16"/>,
   document.getElementById('example')
 );
 });

@@ -1,0 +1,29 @@
+.loading-wrapper-div {
+position: fixed;
+height: 100%;
+width: 100%;
+background: #e7e7e7;
+opacity: 0.4;
+}
+
+.loading-div {
+opacity: 1; 
+height: 40px;
+width:80%;
+margin: 10px auto 10px auto;
+padding: 10px;
+background: #fffbcb;
+border-radius:10px;
+border-width:1px;
+position: fixed;
+left: 10%;
+}
+
+.progress-bar {
+height: 20px;
+border-radius:5px;
+}
+
+.blacktext {
+color: black;
+}
