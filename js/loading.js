@@ -1,14 +1,17 @@
 react=require('react');
+var assign = require('object-assign');
 var React=require('react');
 var ReactDOM=require('react-dom');
 var $=require('jquery');
-var Dispatch=require('./dispatcher');
+var Dispatcher=require('./dispatcher');
+var Dispatch = assign({}, Dispatcher.prototype,{});
 
 var Loading= React.createClass({
   getInitialState: function() {
     return ({
             val: this.props.val,
-            max: this.props.max
+            max: this.props.max,
+            inc: this.props.inc
            });
   },
   render: function() {
@@ -31,8 +34,16 @@ var Loading= React.createClass({
     </div>
     );
   },
+  updateloading(data) {
+    var newval = (parseInt(this.state.val) + parseInt(this.state.inc));
+    if (newval > 100) {
+      newval = 100;
+      data.endfn();
+    }
+    this.setState({val: newval.toString()});
+  },
   componentDidMount: function() {
-    Dispatch.register('INCREMENT_LOADING', this.updateCart);
+    Dispatch.register('INCREMENT_LOADING', this.updateloading);
   },
 
 });
