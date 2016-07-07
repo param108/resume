@@ -6,12 +6,17 @@ var $=require('jquery');
 var Dispatcher=require('./dispatcher');
 var Dispatch = assign({}, Dispatcher.prototype,{});
 
+/*<div class="wholescale">
+<div class="indicator"><img src="pic/indicator.png"/></div>
+<div class="scale1"><img src="pic/scale.png"/><span>2001</span></div><div class="scale2"><img src="pic/scale.png"/><span>2001</span></div><div class="scale3"><img src="pic/scale.png"/><span>2001</span></div><div class="scale4"><img src="pic/scale.png"/><span>2001</span></div><div class="scale5"><img src="pic/scale.png"/><span>2001</span></div><div class="scale6"><img src="pic/scale.png"/><span>2001</span></div><div class="scale7"><img src="pic/scale.png"/><span>2001</span></div><div class="scale8"><img src="pic/scale.png"/><span>2001</span></div><div class="scale9"><img src="pic/scale.png"/><span>2001</span></div>
+</div>
+*/
 var Loading= React.createClass({
   getInitialState: function() {
     return ({
-            val: this.props.val,
-            max: this.props.max,
-            inc: this.props.inc,
+            start: this.props.start,
+            end: this.props.max,
+            pos: this.props.inc
            });
   },
   render: function() {
@@ -26,7 +31,7 @@ var Loading= React.createClass({
     <div className="loading-wrapper-div">
     </div>
     <div className="loading-div">
-      <div className={extraclass} role="progressbar" aria-valuenow={val}
+      <div className={extraclass} role="progressbar" aria-valuenow="70"
            aria-valuemin="0" aria-valuemax="100" style={{width:val+"%"}}>
          <span>loading...{val}%</span>
       </div>
@@ -38,7 +43,7 @@ var Loading= React.createClass({
     var newval = (parseInt(this.state.val) + parseInt(this.state.inc));
     if (newval > 100) {
       newval = 100;
-      $(".loading-div").hide();
+      data.endfn();
     }
     this.setState({val: newval.toString()});
   },
