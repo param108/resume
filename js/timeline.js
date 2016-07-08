@@ -30,6 +30,26 @@ var Timeline= React.createClass({
     margin = margin/2;
     if (margin > 0) {
       $("#timeline").css('left', margin.toString());
+    } else {
+      var ch = (this.state.pos - this.state.start) + 1;
+      var totalwidth = (this.state.end - this.state.start) + 1;
+      if (ch * 50 > this.state.width) {
+        /* 
+         * when you have enough data to the right of position to move the selected node 
+         * to the middle of the screen, then do that. Otherwise move it as close to the
+         * middle as possible.
+         */
+         if (((totalwidth - ch)*50) > (totalwidth/2)) {
+           var len = (this.state.width/2)-(ch*50)+25;
+           $("#timeline").css('left', len.toString());
+         } else {
+           // not enough space left so just scroll as right as possible
+           var len = (this.state.width-(totalwidth*50));
+           $("#timeline").css('left', len.toString());
+         } 
+      } else {
+        $("#timeline").css('left', 0);
+      }
     }
   },
   render: function() {
