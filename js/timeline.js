@@ -52,6 +52,11 @@ var Timeline= React.createClass({
       }
     }
   },
+  clicked: function(event) {
+    f = $(event.target);
+    val = $($(f.parent()[0]).children("span")[0]).text();
+    this.setState({pos: parseInt(val)});
+  },
   render: function() {
     this.updatePosition();
     var lineml = []
@@ -61,7 +66,7 @@ var Timeline= React.createClass({
       pos = (50*(i - this.props.start)).toString()+"px";
       style= { left: pos };
       lineml.push(
-        <div key={keyname} className={classname} style={style}><img src="pic/scale.png"></img><span>{i}</span></div>
+        <div key={keyname} className={classname} style={style} onClick={this.clicked}><img src="pic/scale.png"></img><span>{i}</span></div>
       );
     }
     indicatorstyle={ left: (50*(this.state.pos - this.state.start)) };
