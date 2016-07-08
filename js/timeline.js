@@ -17,30 +17,34 @@ var Dispatch = assign({}, Dispatcher.prototype,{});
 var _lineshown = false;
 var Timeline= React.createClass({
   getInitialState: function() {
+    var width = $(window).width();
     return ({
             start: parseInt(this.props.start),
             end: parseInt(this.props.end),
-            pos: parseInt(this.props.pos)
+            pos: parseInt(this.props.pos),
+            width: width
            });
   },
+  updatePosition: function() {
+    margin = (this.state.width - ((((this.state.end - this.state.start) + 1)*50)))
+    margin = margin/2;
+    if (margin > 0) {
+      $("#timeline").css('left', margin.toString());
+    }
+  },
   render: function() {
+    this.updatePosition();
     var lineml = []
     for (var i = this.props.start; i <= this.props.end; i++) {
       classname="scale scnum"+i.toString();
       keyname="scalekey"+i.toString();
-      pos = (10 + 50*(i - this.props.start)).toString()+"px";
+      pos = (50*(i - this.props.start)).toString()+"px";
       style= { left: pos };
       lineml.push(
         <div key={keyname} className={classname} style={style}><img src="pic/scale.png"></img><span>{i}</span></div>
       );
     }
-    val = this.state.val;
-    extraclass = "";
-    if (val < 16) {
-      extraclass = " blacktext";
-    }
-    extraclass="progress-bar"+extraclass;
-    indicatorstyle={ left: (10 + 50*(this.state.pos - this.state.start)) };
+    indicatorstyle={ left: (50*(this.state.pos - this.state.start)) };
     return (
     <div className="wholescale">
       <div style={indicatorstyle} className="indicator"><img src="pic/indicator.png"/></div>
@@ -49,7 +53,13 @@ var Timeline= React.createClass({
     );
   },
   componentDidMount: function() {
+    window.addEventListener('resize', this.handleResize);
   },
+
+  handleResize: function(e) {
+    this.setState({ width: $(window).width() }); 
+  }, 
+
 
 });
 
