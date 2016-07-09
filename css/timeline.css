@@ -24,3 +24,8 @@ position: fixed;
 #timeline {
 position: fixed;
 }
+
+.arrow {
+position: absolute;
+}
+
