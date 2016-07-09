@@ -33,13 +33,13 @@ var Timeline= React.createClass({
     } else {
       var ch = (this.state.pos - this.state.start) + 1;
       var totalwidth = (this.state.end - this.state.start) + 1;
-      if (ch * 50 > this.state.width) {
+      if (((ch * 50)) > this.state.width) {
         /* 
          * when you have enough data to the right of position to move the selected node 
          * to the middle of the screen, then do that. Otherwise move it as close to the
          * middle as possible.
          */
-         if (((totalwidth - ch)*50) > (totalwidth/2)) {
+         if ((totalwidth - ch) > (totalwidth/2)) {
            var len = (this.state.width/2)-(ch*50)+25;
            $("#timeline").css('left', len.toString());
          } else {
@@ -70,10 +70,11 @@ var Timeline= React.createClass({
       );
     }
     indicatorstyle={ left: (50*(this.state.pos - this.state.start)) };
+    rightarrowstyle={ left: (50*((this.state.end - this.state.start) + 1)) };
     return (
     <div className="wholescale">
       <div style={indicatorstyle} className="indicator"><img src="pic/indicator.png"/></div>
-      {lineml}
+      <div className="arrow left-arrow"><img src="pic/leftarrow.png"/></div>{lineml}<div style={rightarrowstyle} className="arrow right-arrow"><img src="pic/rightarrow.png"/></div>
     </div>
     );
   },
