@@ -23,6 +23,7 @@ var Timeline= React.createClass({
     width = $(window).width();
     ret = this.updatePosition("resize", start, end, pos, width);
     return ({
+            trigger: "resize",
             start: start,
             end: end,
             pos: pos,
@@ -53,9 +54,7 @@ var Timeline= React.createClass({
       ret.leftshift=width - totalwidth; 
       var rightarrowpos = ((width) - 25) ;
       ret.rightarrow=rightarrowpos;
-      if (trigger == "scroll") {
-        ret.scroll = 0;
-      } else if (trigger == "resize" || trigger == "click") {
+      if (trigger == "resize" || trigger == "click") {
         // when we resize we reset the scroll to 0
         // this is so that we can centre the indicator on the screen
         ret.scroll = 0;
@@ -112,6 +111,7 @@ var Timeline= React.createClass({
     val = $($(f.parent()[0]).children("span")[0]).text();
     ret = this.updatePosition('click', this.state.start, this.state.end, parseInt(val), this.state.width)
     this.setState({pos: parseInt(val),
+                   trigger: "click",
                    coords: ret });
   },
   render: function() {
@@ -146,9 +146,53 @@ var Timeline= React.createClass({
     </div>
     );
   },
-  leftclick(event) {
-  },
   rightclick(event) {
+    var ret = this.state.coords;
+    var totallength = ((this.state.end - this.state.start) + 1) * 50;
+    var totalscroll = ret.scroll + ret.leftshift;
+    console.log("start scroll value:"+ret.scroll+":"+ret.leftshift);
+    var modcheck = (this.state.width - 50) - totalscroll;
+    console.log("start scroll value:"+totalscroll);
+    console.log("start overflow value:"+((this.state.width - 50) - totallength));
+    if (totalscroll > ((this.state.width-50) - totallength)) {
+      if (modcheck % 50 == 0) {
+        totalscroll -= 50;
+        ret.scroll = totalscroll - ret.leftshift;
+      } else {
+        modcheck = Math.ceil(modcheck/50)*50;
+        totalscroll = (this.state.width - 50) - modcheck;
+        ret.scroll = totalscroll - ret.leftshift;
+      }
+      console.log("final scroll value:"+totalscroll);
+      if (totalscroll >= ((this.state.width-50) - totallength)) {
+        this.setState({ coords: ret, trigger: "scroll" });
+      } else {
+        ret.scroll = (((this.state.width - 50) - totallength) - this.leftshift);
+        this.setState({ coords: ret, trigger: "scroll" });
+      }
+    }
+  },
+  leftclick(event) {
+    var ret = this.state.coords;
+    var totallength = ((this.state.end - this.state.start) + 1) * 50;
+    var totalscroll = ret.scroll + ret.leftshift;
+    console.log("start scroll value:"+totalscroll);
+    if (totalscroll < 0) {
+      if (totalscroll % 50 == 0) {
+        totalscroll += 50;
+        ret.scroll = totalscroll - ret.leftshift;
+      } else {
+        totalscroll = Math.ceil(totalscroll/50)*50;
+        ret.scroll = totalscroll - ret.leftshift;
+      }
+      console.log("final scroll value:"+totalscroll);
+      if (totalscroll <= 0) {
+        this.setState({ coords: ret, trigger: "scroll" });
+      } else {
+        ret.scroll = 0 - this.leftshift;
+        this.setState({ coords: ret, trigger: "scroll" });
+      }
+    } 
   },
   componentDidMount: function() {
     window.addEventListener('resize', this.handleResize);
@@ -157,8 +201,11 @@ var Timeline= React.createClass({
   },
 
   handleResize: function(e) {
+    var width = $(window).width();
+    ret = this.updatePosition('resize', this.state.start, this.state.end, this.state.pos, this.state.width)
     this.setState({ width: $(window).width(),
-                    trigger: "resize" });
+                    trigger: "resize",
+                    coords: ret });
   }, 
 
 
