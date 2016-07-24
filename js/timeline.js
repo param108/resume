@@ -47,7 +47,8 @@ var Timeline= React.createClass({
       var rightarrowpos = ((this.state.width) - 25) ;
       ret.rightarrow=rightarrowpos;
       if (this.state.trigger == "scroll") {
-      } else if (this.state.trigger == "resize") {
+        ret.scroll = 0;
+      } else if (this.state.trigger == "resize" || this.state.trigger == "click") {
         // when we resize we reset the scroll to 0
         // this is so that we can centre the indicator on the screen
         ret.scroll = 0;
@@ -57,31 +58,53 @@ var Timeline= React.createClass({
         // adding the arrows
         // if the choice has fallen off the edges if we start the scale from the
         // beginning
-        if (ch > (this.state.width-50)) {
+        if (ch > (this.state.width-50)/2) {
           /* 
            * when you have enough data to the right of position to move the selected node 
            * to the middle of the screen, then do that. Otherwise move it as close to the
            * middle as possible.
            */
            if (((totalwidth-50) - ch) > ((this.state.width - 50)/2)) {
+             console.log("GG");
              // first left shift so that the chosen is the right most entry and then
              // left shift by half the size of the screen then add 25 to center
              // the entry on the screen
-             ret.leftshift = (((this.state.width - 50)-ch) - ((this.state.width - 50)/2)) + 25;
+             ret.scroll = (((this.state.width - 50)-ch) - ((this.state.width - 50)/2)) + 25;
+             ret.scroll -= ret.leftshift;
            } else {
+             console.log("GL");
              //ret.leftshift = 0;
              // not enough space left so just scroll as right as possible
-             ret.leftshift = ((this.state.width - 50)-ch) - ((totalwidth - 50) - ch);
+             ret.scroll = ((this.state.width - 50)-ch) - ((totalwidth - 50) - ch);
+             ret.scroll -= ret.leftshift;
            } 
+        } else {
+          /* 
+           * when you have enough data to the left of position to move the selected node 
+           * to the middle of the screen, then do that. Otherwise move it as close to the
+           * middle as possible.
+           */
+           if ((ch) > ((this.state.width - 50)/2)) {
+             console.log("LG");
+             // first right shift until the chosen is the first entry.
+             ret.scroll = ((this.state.width - 50)/2) - ret.leftshift - (ch + 25) + 25;
+           } else {
+             console.log("LL");
+             ret.scroll = 0 - ret.leftshift;
+             //ret.leftshift = 0;
+             // not enough space left so just scroll as right as possible
+           } 
+
         } 
-      }
+      }    
     }
     return ret;
   },
   clicked: function(event) {
     f = $(event.target);
     val = $($(f.parent()[0]).children("span")[0]).text();
-    this.setState({pos: parseInt(val)});
+    this.setState({pos: parseInt(val),
+                   trigger: 'click'});
   },
   render: function() {
     var coords=this.updatePosition();
@@ -112,7 +135,8 @@ var Timeline= React.createClass({
   },
 
   handleResize: function(e) {
-    this.setState({ width: $(window).width() }); 
+    this.setState({ width: $(window).width(),
+                    trigger: "resize" });
   }, 
 
 
