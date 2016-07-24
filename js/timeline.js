@@ -39,7 +39,9 @@ var Timeline= React.createClass({
       ret.rightarrow=rightarrowpos;
       ret.leftshift=0;
       ret.scroll=0;
+      ret.arrowshidden = true;
     } else {
+      ret.arrowshidden = false;
       ret.scaleholder=25;
       ret.wholescale=0;
       var totalwidth = ((this.state.end - this.state.start) + 1)*50 + 50;
@@ -120,13 +122,21 @@ var Timeline= React.createClass({
     }
     indicatorstyle={ left: ((50*(this.state.pos - this.state.start)) + 25) + coords.leftshift + coords.scroll};
     rightarrowstyle={ left: ((50*((this.state.end - this.state.start) + 1))+25) + coords.leftshift};
+    leftarrowstyle={ };
+    if (coords.arrowshidden) {
+      leftarrowstyle.display="none";
+      rightarrowstyle.display="none";
+    } else {
+      leftarrowstyle.display="block";
+      rightarrowstyle.display="block";
+    }
     scaleholderstyle={left:coords.scaleholder,
                       width:(50*((this.state.end - this.state.start) + 1))  + coords.leftshift};
     wholescalestyle={left:coords.wholescale}
     return (
     <div className="wholescale" style={wholescalestyle}>
       <div style={indicatorstyle} className="indicator"><img src="pic/indicator.png"/></div>
-      <div className="arrow left-arrow"><img src="pic/leftarrow.png"/></div><div id="scale-holder" style={scaleholderstyle} >{lineml}</div><div style={rightarrowstyle} className="arrow right-arrow"><img src="pic/rightarrow.png"/></div>
+      <div style= {leftarrowstyle} className="arrow left-arrow"><img src="pic/leftarrow.png"/></div><div id="scale-holder" style={scaleholderstyle} >{lineml}</div><div style={rightarrowstyle} className="arrow right-arrow"><img src="pic/rightarrow.png"/></div>
     </div>
     );
   },
