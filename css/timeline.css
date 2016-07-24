@@ -27,5 +27,15 @@ position: fixed;
 
 .arrow {
 position: absolute;
+z-index: 20;
 }
 
+#scale-holder {
+position: absolute;
+left: 25px;
+height: 75px;
+overflow-x: hidden;
+}
+#scale-list {
+position: absolute;
+}

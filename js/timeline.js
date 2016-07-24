@@ -17,40 +17,66 @@ var Dispatch = assign({}, Dispatcher.prototype,{});
 var _lineshown = false;
 var Timeline= React.createClass({
   getInitialState: function() {
-    var width = $(window).width();
     return ({
             start: parseInt(this.props.start),
             end: parseInt(this.props.end),
             pos: parseInt(this.props.pos),
-            width: width
+            width: $(window).width(),
+            trigger: "resize"
            });
   },
   updatePosition: function() {
-    margin = (this.state.width - ((((this.state.end - this.state.start) + 1)*50)))
+    /*
+     * Extra 1 is for the indicators
+     */
+    margin = (this.state.width - ((((this.state.end - this.state.start) + 1 + 1)*50)))
+    var ret = {};
     margin = margin/2;
     if (margin > 0) {
-      $("#timeline").css('left', margin.toString());
+      var rightarrowpos = ((this.state.end - this.state.start) + 1)*50 + 25;
+      ret.scaleholder=25;
+      ret.wholescale=margin;
+      ret.rightarrow=rightarrowpos;
+      ret.leftshift=0;
+      ret.scroll=0;
     } else {
-      var ch = (this.state.pos - this.state.start) + 1;
-      var totalwidth = (this.state.end - this.state.start) + 1;
-      if (((ch * 50)) > this.state.width) {
-        /* 
-         * when you have enough data to the right of position to move the selected node 
-         * to the middle of the screen, then do that. Otherwise move it as close to the
-         * middle as possible.
-         */
-         if ((totalwidth - ch) > (totalwidth/2)) {
-           var len = (this.state.width/2)-(ch*50)+25;
-           $("#timeline").css('left', len.toString());
-         } else {
-           // not enough space left so just scroll as right as possible
-           var len = (this.state.width-(totalwidth*50));
-           $("#timeline").css('left', len.toString());
-         } 
-      } else {
-        $("#timeline").css('left', 0);
+      ret.scaleholder=25;
+      ret.wholescale=0;
+      var totalwidth = ((this.state.end - this.state.start) + 1)*50 + 50;
+      ret.leftshift=this.state.width - totalwidth; 
+      var rightarrowpos = ((this.state.width) - 25) ;
+      ret.rightarrow=rightarrowpos;
+      if (this.state.trigger == "scroll") {
+      } else if (this.state.trigger == "resize") {
+        // when we resize we reset the scroll to 0
+        // this is so that we can centre the indicator on the screen
+        ret.scroll = 0;
+
+        // now tweak left shift to centre the indicator on the screen if possible
+        var ch = ((this.state.pos - this.state.start) + 1)*50;
+        // adding the arrows
+        // if the choice has fallen off the edges if we start the scale from the
+        // beginning
+        if (ch > (this.state.width-50)) {
+          /* 
+           * when you have enough data to the right of position to move the selected node 
+           * to the middle of the screen, then do that. Otherwise move it as close to the
+           * middle as possible.
+           */
+           if (((totalwidth-50) - ch) > ((this.state.width - 50)/2)) {
+             // first left shift so that the chosen is the right most entry and then
+             // left shift by half the size of the screen then add 25 to center
+             // the entry on the screen
+             ret.leftshift = (((this.state.width - 50)-ch) - ((this.state.width - 50)/2)) + 25;
+           } else {
+             //ret.leftshift = 0;
+             // not enough space left so just scroll as right as possible
+             ret.leftshift = ((this.state.width - 50)-ch) - ((totalwidth - 50) - ch);
+           } 
+        } 
       }
     }
+    return ret;
   },
   clicked: function(event) {
     f = $(event.target);
@@ -58,23 +84,26 @@ var Timeline= React.createClass({
     this.setState({pos: parseInt(val)});
   },
   render: function() {
-    this.updatePosition();
-    var lineml = []
+    var coords=this.updatePosition();
+    var lineml = [];
     for (var i = this.props.start; i <= this.props.end; i++) {
       classname="scale scnum"+i.toString();
       keyname="scalekey"+i.toString();
-      pos = (50*(i - this.props.start)).toString()+"px";
-      style= { left: pos };
+      pos = (50*(i - this.props.start));
+      style= { left: (pos + coords.leftshift + coords.scroll) };
       lineml.push(
         <div key={keyname} className={classname} style={style} onClick={this.clicked}><img src="pic/scale.png"></img><span>{i}</span></div>
       );
     }
-    indicatorstyle={ left: (50*(this.state.pos - this.state.start)) };
-    rightarrowstyle={ left: (50*((this.state.end - this.state.start) + 1)) };
+    indicatorstyle={ left: ((50*(this.state.pos - this.state.start)) + 25) + coords.leftshift + coords.scroll};
+    rightarrowstyle={ left: ((50*((this.state.end - this.state.start) + 1))+25) + coords.leftshift};
+    scaleholderstyle={left:coords.scaleholder,
+                      width:(50*((this.state.end - this.state.start) + 1))  + coords.leftshift};
+    wholescalestyle={left:coords.wholescale}
     return (
-    <div className="wholescale">
+    <div className="wholescale" style={wholescalestyle}>
       <div style={indicatorstyle} className="indicator"><img src="pic/indicator.png"/></div>
-      <div className="arrow left-arrow"><img src="pic/leftarrow.png"/></div>{lineml}<div style={rightarrowstyle} className="arrow right-arrow"><img src="pic/rightarrow.png"/></div>
+      <div className="arrow left-arrow"><img src="pic/leftarrow.png"/></div><div id="scale-holder" style={scaleholderstyle} >{lineml}</div><div style={rightarrowstyle} className="arrow right-arrow"><img src="pic/rightarrow.png"/></div>
     </div>
     );
   },
