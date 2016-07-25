@@ -1,0 +1,38 @@
+#jobdetails {
+  padding-top:85px;
+  width: 80%;
+  /* This value will be updated by the js code based on the width of the timeline */
+  max-width: 850px;
+  margin: auto;
+  position: relative;
+  display: block;
+}
+.jobdetail {
+  position: relative;
+  display: inline-block;
+  width: 30%;
+  margin-left: 2%;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  padding: 10px;
+}
+.jdval {
+  padding-left: 5px;
+}
+
+.jdkey {
+  font-weight: bold;
+}
+.jobdetail span {
+}
+
+.jdhelp {
+  color: blue;
+  margin: auto;
+}
+
+.jdhelpdiv {
+  margin: auto;
+}
