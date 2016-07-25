@@ -6,16 +6,11 @@
   margin: auto;
   position: relative;
   display: block;
+  z-index: 5;
 }
 .jobdetail {
   position: relative;
   display: inline-block;
-  width: 30%;
-  margin-left: 2%;
-  border-radius: 5px;
-  border-width: 1px;
-  border-color: black;
-  border-style: solid;
   padding: 10px;
 }
 .jdval {
