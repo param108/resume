@@ -9,6 +9,7 @@ window.$=window.jQuery;
 var Bootstrap = require('bootstrap');
 var Loader=require('./loading.js');
 var Timeline = require('./timeline.js');
+var Waiting= require('./waiting.js');
 
 $( document ).ready(function(){
 console.log("Running");
@@ -21,5 +22,11 @@ ReactDOM.render(
   <Timeline start="2000" end="2016" pos="2016"/>,
   document.getElementById('timeline')
 );
+
+ReactDOM.render(
+  <Waiting/>,
+  document.getElementById('waiting')
+);
+
 });
 

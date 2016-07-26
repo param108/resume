@@ -1,0 +1,17 @@
+#wait-screen-div {
+  position: fixed;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+  background-color: white;
+  opacity: 0.8;
+  z-index: 20;
+}
+
+#wait-img-div {
+  display: inline-block;
+}
+#wait-dummy-div {
+  display: inline-block;
+  height:50%; /* FIXME dont know why this works! */
+}
