@@ -1,4 +1,5 @@
 #wait-screen-div {
+  display: none;
   position: fixed;
   height: 100%;
   text-align: center;

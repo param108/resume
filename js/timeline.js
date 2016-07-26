@@ -113,6 +113,7 @@ var Timeline= React.createClass({
     this.setState({pos: parseInt(val),
                    trigger: "click",
                    coords: ret });
+    Dispatch.dispatch("NEW_DATE",{ date: parseInt(val) });
   },
   render: function() {
     var lineml = [];

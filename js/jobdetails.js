@@ -8,43 +8,70 @@ var Dispatch = assign({}, Dispatcher.prototype,{});
 
 var JobDetails= React.createClass({
   getInitialState: function() {
+  /*        
+           Sample Data
+           data: [{ title: "Senior Software Engineer",
+                    role: "Component Owner",
+                    company: "Cisco Systems",
+                    tech: "C++,C"},
+                  { title: "Senior Software Engineer",
+                    role: "Component Owner",
+                    company: "Cisco Systems",
+                    tech: "C++,C"},
+                  { title: "Senior Software Engineer",
+                    role: "Component Owner",
+                    company: "Cisco Systems",
+                    tech: "C++,C"}]
+   */
     return ({
-            year: this.props.year,
-            selected: this.props.selected,
+             data: []
            });
   },
   render: function() {
-    val = this.state.val;
-    extraclass = "";
-    if (val < 16) {
-      extraclass = " blacktext";
-    }
-    extraclass="progress-bar"+extraclass;
+    data = this.state.data;
+    idx = 0;
+    List = data.map(function(item) {
+          idx++;
+          return (
+            <div key={idx} className="jobdetail col-xs-12 col-lg-4 col-md-4 col-sm-6">
+<span className="Title jdkey">Title:</span><span className="TitleVal jdval">{item.title}</span><br/>
+<span className="Role jdkey">Role:</span><span className="RoleVal jdval">{item.role}</span><br/>
+<span className="Company jdkey">Company:</span><span className="CompanyVal jdval">{item.company}</span><br/>
+<span className="Technology jdkey">Technology:</span><span className="TechVal jdval">{item.tech}</span><br/>
+<div className="jdhelpdiv"><span className="jdhelp">Click for more details</span></div>
+</div>
+          );}); 
     return (
-    <div>
-    <div className="loading-wrapper-div">
-    </div>
-    <div className="loading-div">
-      <div className={extraclass} role="progressbar" aria-valuenow={val}
-           aria-valuemin="0" aria-valuemax="100" style={{width:val+"%"}}>
-         <span>loading...{val}%</span>
+      <div>
+      {List}
       </div>
-    </div>
-    </div>
     );
   },
-  updateloading(data) {
-    var newval = (parseInt(this.state.val) + parseInt(this.state.inc));
-    if (newval > 100) {
-      newval = 100;
-      $(".loading-div").hide();
-    }
-    this.setState({val: newval.toString()});
+  updateJobDetails: function(data) {
+    this.loadResumeData(this.props.url + data.date);
+  },
+  loadResumeData: function(url) {
+    var ctx = this;
+    $.ajax({ url: url,
+             method: "post",
+             cache: false,
+             dataType: "json",
+             success: function(data) {
+               ctx.setState({ data: data.data });
+             },
+             complete: function(obj, status) {
+               Dispatch.dispatch('HIDE_WAITING', 
+                 {comp: "jobdetails"});
+             }
+           }
+    );
   },
   componentDidMount: function() {
-    Dispatch.register('INCREMENT_LOADING', this.updateloading);
+    Dispatch.dispatch('SHOW_WAITING', { comp: "jobdetails"});
+    this.loadResumeData(this.props.url + this.props.start + "/");
+    Dispatch.register('NEW_DATE', this.updateJobDetails);
   },
 
 });
 
-module.exports=Loading;
+module.exports=JobDetails;
