@@ -21,16 +21,17 @@ var Waiting= React.createClass({
     </div>
     );
   },
-  updateloading(data) {
-    var newval = (parseInt(this.state.val) + parseInt(this.state.inc));
-    if (newval > 100) {
-      newval = 100;
-      $(".loading-div").hide();
-    }
-    this.setState({val: newval.toString()});
+  showwaiting(data) {
+    $("#wait-screen-div").show();
   },
+
+  hidewaiting(data) {
+    $("#wait-screen-div").hide();
+  },
+
   componentDidMount: function() {
-    Dispatch.register('INCREMENT_LOADING', this.updateloading);
+    Dispatch.register('SHOW_WAITING', this.showwaiting);
+    Dispatch.register('HIDE_WAITING', this.hidewaiting);
   },
 
 });

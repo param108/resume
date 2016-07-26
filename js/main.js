@@ -17,7 +17,8 @@ console.log("Running");
   <Loader max="100" val="16" inc="10"/>,
   document.getElementById('loading')
 );*/
-
+setTimeout(function() { Dispatch.dispatch("SHOW_WAITING",{});
+                        setTimeout(function() { Dispatch.dispatch("HIDE_WAITING",{}); }, 5000);},5000);
 ReactDOM.render(
   <Timeline start="2000" end="2016" pos="2016"/>,
   document.getElementById('timeline')
