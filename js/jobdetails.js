@@ -59,7 +59,8 @@ var JobDetails= React.createClass({
     );
   },
   updateJobDetails: function(data) {
-    this.loadResumeData(this.props.url + data.date);
+    console.log("Hit");
+    this.loadResumeData(this.props.url + data.date + "/");
   },
   loadResumeData: function(url) {
     var ctx = this;

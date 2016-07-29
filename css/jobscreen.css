@@ -1,7 +1,6 @@
 #jobscreen {
   display: none;
   top:0;
-  background-color: beige;
   left: 10%;
   position: fixed;
   width: 80%;
@@ -15,4 +14,39 @@
  position: absolute;
  left:0;
  top:0;
+}
+
+.jobscreen-div {
+  width: 100%;
+}
+
+
+.jobscreen-desc-div {
+  padding-top:10px;
+  /*padding: 10px;*/
+  border-radius: 10px;
+  border-width: 2px;
+  border-style: solid;
+  max-width: 550px;
+  background-color: white;
+  margin-left:auto; 
+  margin-right:auto; 
+  margin-top: 50px;
+}
+ 
+.jobscreen-desc-carousel-wrapper {
+  width: 100%;
+  text-align: center;
+}
+.jobscreen-desc-text-wrapper {
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.JVWrapper {
+  display: block;
+}
+.JVKey {
+  font-weight: bold;
 }

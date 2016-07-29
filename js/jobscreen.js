@@ -29,17 +29,17 @@ var JobScreen= React.createClass({
            });
   },
   getData: function (key,data) {
-    titlestr=key+": "+data;
+    titlestr=key+": ";
     classname="JV"+key+" JVKey"
-    return ( <span key={key} className={classname}>{titlestr}</span> );
+    return ( <span key={key} className="JVWrapper" ><span className={classname}>{titlestr}</span><span>{data}</span></span> );
   },
   getParas: function(key, data, List) {
     titlestr=key+": ";
     classname="JV"+key+" JVKey"
     List.push(<span key={key} className={classname}>{titlestr}</span> );
-    idx = 1;
-    for (para in data ) {
+    for (var idx = 0; idx < data.length; idx++) {
       var keyidx=key+idx;
+      var para = data[idx];
       List.push(<p key={keyidx} >{para}</p>);
     }
   },
@@ -47,17 +47,22 @@ var JobScreen= React.createClass({
     return ( <div key="carousel" id="carousel"><Carousel pics={data} /></div> );
   },
   formatData: function(data) {
-    List=[];
+    List_below=[];
+    List_above=[];
+    carousel = null;
     if (data.hasOwnProperty('carousel')) {
-      List.push(this.getCarousel(data.carousel));
+      carousel = this.getCarousel(data.carousel);
     }  
     if (data.hasOwnProperty('title')) {
-      List.push(this.getData("Title",data.title));
+      List_above.push(this.getData("Title",data.title));
+    }
+    if (data.hasOwnProperty('role')) {
+      List_above.push(this.getData("Role",data.role));
     }
     if (data.hasOwnProperty('desc')) {
-      this.getParas("Description", data.desc, List);
+      this.getParas("Description", data.desc, List_below);
     }
-    return List;
+    return [List_above,carousel,List_below];
   },
   hideScreen: function(e) {
     $('#jobscreen').fadeOut();
@@ -67,9 +72,19 @@ var JobScreen= React.createClass({
     idx = 0;
     List = this.formatData(data);
     return (
-      <div>
+      <div className="jobscreen-div">
       <img onClick={this.hideScreen} id="jobscreen-cross" src="/~paramp/resume/pic/x.png"></img>
-      {List}
+      <div className="jobscreen-desc-div">
+      <div className="jobscreen-desc-text-wrapper">
+      {List[0]}
+      </div>
+      <div className="jobscreen-desc-carousel-wrapper">
+      {List[1]}
+      </div>
+      <div className="jobscreen-desc-text-wrapper">
+      {List[2]}
+      </div>
+      </div>
       </div>
     );
   },

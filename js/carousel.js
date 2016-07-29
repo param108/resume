@@ -78,7 +78,7 @@ var Carousel= React.createClass({
       }
     });
     return (
-      <div id="carousel-div" style={{width:this.state.windowWidth+'px'}}>
+      <div id="carousel-div">
       <img onMouseEnter={this.handleHover} onMouseLeave={this.handleNoHover} onClick={this.imageClick} src={this.state.imgs[this.state.imgid]}/>
       <div id="carousel-radios"  onMouseEnter={this.handleHover} onMouseLeave={this.handleNoHover} onClick={this.imageClick} >
       {List}
