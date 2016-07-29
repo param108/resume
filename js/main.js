@@ -11,6 +11,7 @@ var Loader=require('./loading.js');
 var Timeline = require('./timeline.js');
 var Waiting= require('./waiting.js');
 var JobDetails = require('./jobdetails.js');
+var JobScreen = require('./jobscreen.js');
 $( document ).ready(function(){
 console.log("Running");
 /*ReactDOM.render(
@@ -36,6 +37,11 @@ ReactDOM.render(
   <JobDetails url="http://localhost/~paramp/resume-data/" start="2016"/>,
   document.getElementById('jobdetails')
 );
+ReactDOM.render(
+  <JobScreen />,
+  document.getElementById('jobscreen')
+);
+
 
 });
 

@@ -27,13 +27,24 @@ var JobDetails= React.createClass({
              data: []
            });
   },
+  clicked: function(e) {
+    p = parseInt($(e.currentTarget).attr("data-jobid"));
+    for (var idx=0; idx < this.state.data.length; idx++) {
+      var item = this.state.data[idx];
+      if (item.id == p) {
+        Dispatch.dispatch('NEW_JOB_DETAIL', item);
+        return;
+      }
+    }
+  },
   render: function() {
     data = this.state.data;
     idx = 0;
+    var clickhandler=this.clicked;
     List = data.map(function(item) {
           idx++;
           return (
-            <div key={idx} className="jobdetail col-xs-12 col-lg-4 col-md-4 col-sm-6">
+            <div data-jobid={item.id} key={item.id} onClick={clickhandler} className="jobdetail col-xs-12 col-lg-4 col-md-4 col-sm-6">
 <span className="Title jdkey">Title:</span><span className="TitleVal jdval">{item.title}</span><br/>
 <span className="Role jdkey">Role:</span><span className="RoleVal jdval">{item.role}</span><br/>
 <span className="Company jdkey">Company:</span><span className="CompanyVal jdval">{item.company}</span><br/>

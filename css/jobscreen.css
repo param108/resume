@@ -1,0 +1,18 @@
+#jobscreen {
+  display: none;
+  top:0;
+  background-color: beige;
+  left: 10%;
+  position: fixed;
+  width: 80%;
+  margin: auto;
+  height: 100%;
+  z-index: 25;
+}
+
+#jobscreen-cross {
+ width: 50px;
+ position: absolute;
+ left:0;
+ top:0;
+}
