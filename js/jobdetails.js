@@ -59,7 +59,7 @@ var JobDetails= React.createClass({
     );
   },
   updateJobDetails: function(data) {
-    console.log("Hit");
+    console.log("New Date:"+data.date);
     this.loadResumeData(this.props.url + data.date + "/");
   },
   loadResumeData: function(url) {
@@ -69,6 +69,7 @@ var JobDetails= React.createClass({
              cache: false,
              dataType: "json",
              success: function(data) {
+               console.log (data.data)
                ctx.setState({ data: data.data });
              },
              complete: function(obj, status) {
